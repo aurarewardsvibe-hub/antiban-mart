@@ -11,16 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Create demo APK file
-        run: |
-          mkdir -p output
-          echo "ANTIBAN MART APK demo build" > output/antiban-mart-demo.apk
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build real APK
+        run: gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: antiban-mart-apk
-          path: output/antiban-mart-demo.apk
+          name: antiban-mart-real-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
